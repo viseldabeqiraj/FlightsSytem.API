@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
+using System.Net;
 using System.Security.Claims;
 
 
@@ -40,22 +41,29 @@ namespace FlightSystemAPI.Controllers
             }
             catch(Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return BadRequest();
         }
         private async Task<User> GetCurrentUser()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
-            var role = await _userManager.GetRolesAsync(user);
-            return new User
+            try
             {
-                Id=user.Id,
-                RoleId=role.FirstOrDefault().ToString()
-            };            
+                var user = await _userManager.FindByNameAsync(User.Identity.Name);
+                var role = await _userManager.GetRolesAsync(user);
+                return new User
+                {
+                    Id = user.Id,
+                    RoleId = role.FirstOrDefault().ToString()
+                };
+            }
+            catch(Exception ex)
+            {
+                throw new ApplicationException(ex.InnerException.Message);
+
+            }
         }
 
-        [Authorize]
         [HttpGet("/api/[controller]/[action]")]
         public async Task<IActionResult> getTrips()
         {
@@ -74,7 +82,7 @@ namespace FlightSystemAPI.Controllers
             }
             catch(Exception ex)
             {
-               
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return BadRequest("Could not get trips.");
         }
@@ -97,10 +105,11 @@ namespace FlightSystemAPI.Controllers
             }
             catch(Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return BadRequest();
         }
+
         [HttpPut("/api/[controller]/[action]")]
 
         public IActionResult UpdateTrip([FromBody] TripToShowDto trip)
@@ -115,10 +124,11 @@ namespace FlightSystemAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return NotFound("Could not update trip");
         }
+
         [HttpGet("{reason},{status}")]
         public IActionResult Filter(string reason, string status)
         {
@@ -134,7 +144,7 @@ namespace FlightSystemAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return BadRequest("Could not filter trip");
         }
@@ -153,7 +163,7 @@ namespace FlightSystemAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return BadRequest("Could not get trip data.");
         }
@@ -171,10 +181,11 @@ namespace FlightSystemAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return BadRequest();
         }
+
         [Authorize(Roles = "admin")]
         [HttpPost("{id}")]
         public IActionResult ApproveTrip(int id)
@@ -189,7 +200,7 @@ namespace FlightSystemAPI.Controllers
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return BadRequest();
         }

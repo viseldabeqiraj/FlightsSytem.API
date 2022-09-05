@@ -67,7 +67,7 @@ namespace FlightSystemAPI.Controllers
             if (user == null || !await _userManager.CheckPasswordAsync(user, userForAuthentication.Password))
                 return Unauthorized(new AuthResponseDto { ErrorMessage = "Invalid Authentication" });
             var signingCredentials = GetSigningCredentials();
-            var claims = GetClaims(user);
+            var claims = await GetClaims(user);
             var role = _userManager.GetRolesAsync(user);
             var tokenOptions = GenerateTokenOptions(signingCredentials, claims);
             var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
@@ -84,14 +84,13 @@ namespace FlightSystemAPI.Controllers
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
 
-        private List<Claim> GetClaims(IdentityUser user)
+        private async Task<List<Claim>> GetClaims(IdentityUser user)
         {
-            var userRoles = _userManager.GetRolesAsync(user);
+            var userRoles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role, userRoles.Result.ToString()),
-                
+                new Claim(ClaimTypes.Role, string.Join(',', userRoles)),                
             };
 
             return claims;

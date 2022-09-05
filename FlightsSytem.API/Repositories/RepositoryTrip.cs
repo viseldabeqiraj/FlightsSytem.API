@@ -19,9 +19,7 @@ namespace FlightSystem.API.Repositories
         {
             try
             {
-                //var role = _dbContext.Users.Where
-                //    (u => u.Id.ToString() == currentUserId).Select
-                //    (u => u.RoleId).FirstOrDefault();
+                
                 var allTrips = new List<TripToAddDto>();
 
                 if (role == "admin") //if admin
@@ -59,7 +57,7 @@ namespace FlightSystem.API.Repositories
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return null;
         }
@@ -68,7 +66,6 @@ namespace FlightSystem.API.Repositories
         {
             try
             {
-                //currentUserId = "6";
                 var newTrip = new Trip();
 
                 newTrip.From = trip.From;
@@ -86,7 +83,7 @@ namespace FlightSystem.API.Repositories
             }
             catch(Exception ex)
             {
-                
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return null;
         }
@@ -106,7 +103,7 @@ namespace FlightSystem.API.Repositories
             }
             catch(Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return false;
         }
@@ -132,7 +129,7 @@ namespace FlightSystem.API.Repositories
             }
             catch(Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
         }
         public TripToShowDto GetTrip(int id)
@@ -161,7 +158,7 @@ namespace FlightSystem.API.Repositories
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return null;
         }
@@ -184,7 +181,7 @@ namespace FlightSystem.API.Repositories
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
         }
 
@@ -249,7 +246,7 @@ namespace FlightSystem.API.Repositories
             }
             catch(Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return null;
         }
@@ -270,7 +267,7 @@ namespace FlightSystem.API.Repositories
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return false;
         }
@@ -292,7 +289,7 @@ namespace FlightSystem.API.Repositories
             }
             catch (Exception ex)
             {
-
+                throw new ApplicationException(ex.InnerException.Message);
             }
             return false;
         }
